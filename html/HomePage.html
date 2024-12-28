@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Scraper</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Light mode styles (default) */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+            background-color: #f6f8fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .container {
+            max-width: 360px;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header img {
+            width: 48px;
+            height: 48px;
+        }
+        .box {
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(27, 31, 35, 0.12);
+        }
+        .box h1 {
+            font-size: 24px;
+            font-weight: 400;
+            margin: 0 0 10px;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            font-size: 14px;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="url"], select {
+            width: 100%;
+            padding: 8px 12px;
+            font-size: 14px;
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #2ea44f;
+            color: white;
+            font-size: 14px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        input[type="submit"]:hover {
+            background-color: #22863a;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #586069;
+        }
+        .footer a {
+            color: #0366d6;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark mode styles */
+        body.dark-mode {
+            background-color: #181818; /* Dark background */
+            color: #e1e4e8; /* Light text color */
+        }
+        .container.dark-mode .box {
+            background-color: #2d2d2d; /* Dark background for the box */
+            border: 1px solid #444; /* Dark border */
+        }
+        .container.dark-mode .box h1 {
+            color: #e1e4e8; /* Light text for heading */
+        }
+        .container.dark-mode label {
+            color: #ccc; /* Lighter color for label */
+        }
+        .container.dark-mode input[type="url"], 
+        .container.dark-mode select {
+            background-color: #333; /* Dark background for input fields */
+            color: #e1e4e8; /* Light text inside fields */
+            border: 1px solid #444; /* Darker border */
+        }
+        .container.dark-mode .footer {
+            color: #ccc; /* Light footer text */
+        }
+
+        /* Lightbulb icon style */
+        .lightbulb-icon {
+            font-size: 24px;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+        .lightbulb-icon.light-mode {
+            color: black;
+        }
+        .lightbulb-icon.dark-mode {
+            color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Lightbulb Icon for Mode Toggle -->
+    <i class="fas fa-lightbulb lightbulb-icon light-mode" id="lightbulb"></i>
+
+    <div class="container">
+        <div class="box">
+            <h1>Web Scraper</h1>
+            <form id="scraper-form" method="post">
+                <div class="form-group">
+                    <label for="url_field">Enter the URL</label>
+                    <input type="url" id="url_field" name="url" placeholder="https://example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="mode">Mode</label>
+                    <select id="mode" name="mode" required>
+						<option value="remove_paywall_1">Remove Paywall - 1</option>
+						<option value="remove_paywall_2">Remove Paywall - 2</option>
+						<option value="remove_paywall_3">Remove Paywall - 3</option>
+                        <option value="remove_paywall_4">Remove Paywall - 4</option>
+                        <option value="instant_view">Instant View</option>
+						<option value="ad_free">Ad Free</option>
+                    </select>
+                </div>
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+        <div class="footer">
+            <p>To read FAQs <a href="faqsPage.html">Click here</a></p>
+        </div>
+    </div>
+
+    <script>
+        // Get the lightbulb icon and body
+        const lightbulb = document.getElementById('lightbulb');
+        const body = document.body;
+        const container = document.querySelector('.container');
+
+        // Check the current mode on page load
+        const currentMode = localStorage.getItem('mode');
+        if (currentMode && currentMode === 'dark') {
+            body.classList.add('dark-mode');
+            container.classList.add('dark-mode');
+            lightbulb.classList.remove('light-mode');
+            lightbulb.classList.add('dark-mode');
+        }
+
+        // Toggle between light and dark modes
+        lightbulb.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            container.classList.toggle('dark-mode');
+            lightbulb.classList.toggle('dark-mode');
+            lightbulb.classList.toggle('light-mode');
+
+            // Save the current mode in localStorage to persist the theme on page reload
+            if (body.classList.contains('dark-mode')) {
+                localStorage.setItem('mode', 'dark');
+            } else {
+                localStorage.setItem('mode', 'light');
+            }
+        });
+
+        // Change form action based on the selected mode
+        const form = document.getElementById('scraper-form');
+        const modeSelect = document.getElementById('mode');
+		const urlInput = document.getElementById('url_field');
+
+        form.addEventListener('submit', (e) => {
+            const selectedMode = modeSelect.value;
+			const url = urlInput.value;
+            if (selectedMode === 'web_scrape') {
+                form.action = '/web-scrape';
+            } else if (selectedMode === 'instant_view') {
+                form.action = '/instant-view';
+            }
+			else if (selectedMode === 'ad_free') {
+                form.action = '/ad-free';
+            }
+			else if (selectedMode === 'remove_paywall_1') {
+				// Redirect to the URL entered in the input field for 'remove_paywall_1' mode
+	            e.preventDefault(); // Prevent the form from submitting
+	            window.location.href = "https://archive.is/newest/" + url; // Redirect to the entered URL
+            }
+			else if (selectedMode === 'remove_paywall_2') {
+				e.preventDefault(); // Prevent the form from submitting
+				window.location.href = "https://archive.is/oldest/" + url;
+            }
+			else if (selectedMode === 'remove_paywall_3') {
+				e.preventDefault(); // Prevent the form from submitting
+				window.location.href = "https://web.archive.org/" + url;
+            }
+			else if (selectedMode === 'remove_paywall_4') {
+				e.preventDefault(); // Prevent the form from submitting
+				window.location.href = "https://12ft.io/" + url;
+            }
+        });
+    </script>
+</body>
+</html>
