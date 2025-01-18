@@ -63,7 +63,7 @@ const faqs = [
     },
     {
         question: "Which news websites are supported?",
-        answer: "PaywallFree works with most major news and content websites including The New York Times, Wall Street Journal, Washington Post, Bloomberg, Financial Times, and many other premium publishers. Our tool is regularly updated to maintain compatibility."
+        answer: "PaywallFree works with most major news and content websites including ABC, DEF, GHI, JKL, MNO, and many other premium publishers. Our tool is regularly updated to maintain compatibility."
     },
     {
         question: "Is PaywallFree free to use?",
