@@ -89,3 +89,8 @@ async function fetchPaywall(url) {
 		window.location.href = "result.html";
 	}
 }
+
+document.addEventListener('contextmenu', function(e) {
+    e.preventDefault(); // Disable the right-click context menu
+    //console.log('Right-click disabled');
+});
