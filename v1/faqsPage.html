@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQs</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Light mode styles (default) */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+            background-color: #f6f8fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            position: relative; /* To ensure absolute positioning of question marks */
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .container {
+            max-width: 720px;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            position: relative;
+            z-index: 10; /* To ensure the container is on top */
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header img {
+            width: 48px;
+            height: 48px;
+        }
+        .box {
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(27, 31, 35, 0.12);
+        }
+        .box h1 {
+            font-size: 24px;
+            font-weight: 400;
+            margin: 0 0 10px;
+            text-align: center;
+        }
+        .faq-item {
+            margin-bottom: 15px;
+        }
+        .faq-item h2 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        .faq-item p {
+            font-size: 16px;
+            color: #586069;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #586069;
+        }
+        .footer a {
+            color: #0366d6;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Dark mode styles */
+        body.dark-mode {
+            background-color: #181818; /* Dark background */
+            color: #e1e4e8; /* Light text color */
+        }
+        .container.dark-mode .box {
+            background-color: #2d2d2d; /* Dark background for the box */
+            border: 1px solid #444; /* Dark border */
+        }
+        .container.dark-mode .box h1 {
+            color: #e1e4e8; /* Light text for heading */
+        }
+        .container.dark-mode .faq-item h2 {
+            color: #e1e4e8; /* Light text for FAQ heading */
+        }
+        .container.dark-mode .faq-item p {
+            color: #ccc; /* Light text for FAQ content */
+        }
+        .container.dark-mode .footer {
+            color: #ccc; /* Light footer text */
+        }
+
+        /* Question mark styling */
+        .question-mark {
+            position: absolute;
+            font-size: 24px;
+            opacity: 0.5;
+            pointer-events: none;
+            z-index: 5;
+            user-select: none; /* Prevent selection */
+            transform-origin: center;
+        }
+
+        /* Lightbulb icon style */
+        .lightbulb-icon {
+            font-size: 24px;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+        .lightbulb-icon.light-mode {
+            color: black;
+        }
+        .lightbulb-icon.dark-mode {
+            color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Lightbulb Icon for Mode Toggle -->
+    <i class="fas fa-lightbulb lightbulb-icon light-mode" id="lightbulb"></i>
+
+    <div class="container">
+        <div class="box">
+            <h1>FAQs</h1>
+            <div class="faq-item">
+                <h2>What is the Web Scraper?</h2>
+                <p>The Web Scraper is a tool that allows you to read the articles you want to read, without being blocked by a paywall.</p>
+            </div>
+            <div class="faq-item">
+                <h2>How do I use the Web Scraper?</h2>
+                <p>Simply enter the URL of the website you want to read in the input field and select the desired mode. Then, click the "Submit" button to remove the paywall.</p>
+            </div>
+            <div class="faq-item">
+                <h2>What are the different modes available?</h2>
+                <p>The Web Scraper offers 4 modes: Remove Paywall - 1, 2, 3 and 4 as of now.</p>
+            </div>
+            <div class="faq-item">
+                <h2>Can I remove paywall from any website?</h2>
+                <p>While the Web Scraper can remove paywall from most websites, some websites may have restrictions or protections in place to prevent it.
+                    Some sites use a "hard paywall" on the server-side, which means that the site doesn't load the content until the user has logged. In these instanecs, the article isn't available for crawling, which means it can't be archived, and so the full article can't be found.</p>
+            </div>
+        </div>
+        <div class="footer">
+            <p>Back to <a href="/Web-App/">Home</a></p>
+        </div>
+    </div>
+
+    <script>
+        // Get the lightbulb icon and body
+        const lightbulb = document.getElementById('lightbulb');
+        const body = document.body;
+        const container = document.querySelector('.container');
+
+        // Store generated question mark positions to avoid overlap
+        const positions = [];
+
+        // Check the current mode on page load
+        const currentMode = localStorage.getItem('mode');
+        if (currentMode && currentMode === 'dark') {
+            body.classList.add('dark-mode');
+            container.classList.add('dark-mode');
+            lightbulb.classList.remove('light-mode');
+            lightbulb.classList.add('dark-mode');
+        }
+
+        // Toggle between light and dark modes
+        lightbulb.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            container.classList.toggle('dark-mode');
+            lightbulb.classList.toggle('dark-mode');
+            lightbulb.classList.toggle('light-mode');
+
+            // Save the current mode in localStorage to persist the theme on page reload
+            if (body.classList.contains('dark-mode')) {
+                localStorage.setItem('mode', 'dark');
+            } else {
+                localStorage.setItem('mode', 'light');
+            }
+
+            // Update question mark colors based on current mode
+            updateQuestionMarkColor();
+        });
+
+        // Function to generate random question marks without overlap
+        function generateRandomQuestionMarks() {
+            const numMarks = 250; // Number of question marks to generate
+            let attempts = 0;
+            for (let i = 0; i < numMarks; i++) {
+                let isOverlapping = true;
+                let top, left, size, rotation;
+
+                while (isOverlapping && attempts < 100) {
+                    // Randomize size, position, and rotation
+                    size = Math.random() * 65 + 10; // Random size between 10px and 75px
+                    top = Math.random() * 100 + '%'; // Random top position
+                    left = Math.random() * 100 + '%'; // Random left position
+                    rotation = Math.random() * 360; // Random rotation in degrees
+
+                    isOverlapping = checkOverlap(top, left, size); // Check if new position overlaps
+                    attempts++;
+                }
+
+                // Create and style the question mark
+                const questionMark = document.createElement('div');
+                questionMark.textContent = '?';
+                questionMark.classList.add('question-mark');
+                questionMark.style.fontSize = `${size}px`;
+                questionMark.style.top = top;
+                questionMark.style.left = left;
+                questionMark.style.transform = `rotate(${rotation}deg)`;
+
+                // Add to the body
+                document.body.appendChild(questionMark);
+                positions.push({ top, left, size }); // Store the position
+
+                // Reset attempts for the next question mark
+                attempts = 0;
+            }
+
+            // Update the colors of question marks after they are generated
+            updateQuestionMarkColor();
+        }
+
+        // Function to check if a position overlaps with any existing position
+        function checkOverlap(top, left, size) {
+            for (const pos of positions) {
+                const existingTop = parseFloat(pos.top);
+                const existingLeft = parseFloat(pos.left);
+                const existingSize = pos.size;
+
+                // Check for overlap by comparing distance
+                const distance = Math.sqrt(Math.pow(existingTop - parseFloat(top), 2) + Math.pow(existingLeft - parseFloat(left), 2));
+
+                // If the distance is smaller than the combined size of the question marks, they overlap
+                if (distance < (existingSize + size) / 2) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // Function to update the color of question marks based on current mode
+        function updateQuestionMarkColor() {
+            const questionMarks = document.querySelectorAll('.question-mark');
+            const color = body.classList.contains('dark-mode') ? '#f0f0f0' : 'black'; // Dark mode color is light, light mode color is black
+            questionMarks.forEach(mark => {
+                mark.style.color = color;
+            });
+        }
+
+        // Call the function to generate question marks
+        generateRandomQuestionMarks();
+    </script>
+</body>
+</html>

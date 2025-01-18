@@ -1,0 +1,42 @@
+/* Custom styles to complement Tailwind */
+.hover\:bg-gray-750:hover {
+    background-color: #2d374d;
+}
+
+/* Ensure smooth transitions */
+.transition-all {
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 0.1ms;
+}
+
+/* Focus styles for better accessibility */
+.focus\:ring:focus {
+    --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+    --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(3px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+    box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+}
+
+/* Form container styles */
+#paywallForm .form-container {
+    width: 350px;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    border-width: 1px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    margin: 0 auto;
+    transition: background-color 0.0002s ease-in-out, border-color 0.0002s ease-in-out;
+}
+
+#paywallForm input,
+#paywallForm select,
+#paywallForm button {
+    width: 288px; /* w-72 = 18rem = 288px */
+}
+
+/* Theme transition styles */
+.transition-colors {
+    transition-property: background-color, border-color, color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 0.1ms;
+}
