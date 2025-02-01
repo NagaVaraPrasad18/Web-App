@@ -153,7 +153,7 @@
 						<option value="remove_paywall_5">Remove Paywall - 5</option>
                     </select>
                 </div>
-                <input type="submit" value="Submit">
+                <input id="submitButton" type="submit" value="Submit">
             </form>
 
         </div>
@@ -205,6 +205,10 @@
 
         form.addEventListener('submit', (e) => {
             e.preventDefault(); // Prevent the default form submission
+
+		const submitButton = document.getElementById("submitButton");
+		submitButton.disabled = true; // Disable the button
+		submitButton.value = "Submitting...";
 
             const selectedMode = modeSelect.value;
             const url = urlInput.value;
